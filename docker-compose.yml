@@ -7,6 +7,8 @@ services:
       context: ./api
     ports:
       - '8080:8080'
+    volumes:
+      -/home/ansible/logs:/logs
 
   ui:
     container_name: ansible-manager-ui

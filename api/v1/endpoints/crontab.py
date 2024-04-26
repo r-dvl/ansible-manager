@@ -1,10 +1,11 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
+from fastapi.responses import PlainTextResponse
 import subprocess
 
-router = FastAPI()
+router = APIRouter()
 
-@router.get("/read-crontab")
-def read_crontab():
-    command = "crontab -l"  # Comando personalizado
+@router.get("/get-crontab", response_class=PlainTextResponse)
+def get_crontab():
+    command = "crontab -l"
     result = subprocess.check_output(command, shell=True)
-    return {"output": result.decode("utf-8")}
+    return result.decode("utf-8")
