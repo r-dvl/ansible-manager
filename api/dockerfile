@@ -1,0 +1,21 @@
+FROM python:3.10-alpine
+
+LABEL org.opencontainers.image.source = "https://github.com/r-dvl/ansible-manager"
+LABEL org.opencontainers.image.description "Ansible Manager API"
+
+# Setup
+ENV SECRET_KEY=secret
+WORKDIR /api
+
+# Install dependencies
+COPY ./requirements.txt /api/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /api/requirements.txt
+
+# Copy code
+COPY ./main.py /api
+COPY ./v1 /api/v1
+
+# API listener port
+EXPOSE 8080
+
+CMD ["python3", "./main.py"]

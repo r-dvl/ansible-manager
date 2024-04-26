@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  api:
+    container_name: ansible-manager-api
+    restart: unless-stopped
+    build:
+      context: ./api
+    ports:
+      - '8080:8080'
+    environment:
+      - SECRET_KEY=secret
+
+  ui:
+    container_name: ansible-manager-ui
+    restart: unless-stopped
+    build:
+      context: ./ui
+    ports:
+      - '8081:8081'
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
