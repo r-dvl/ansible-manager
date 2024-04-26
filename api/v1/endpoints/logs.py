@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
+import subprocess
 from datetime import date
 from pathlib import Path
 
@@ -16,4 +17,4 @@ def get_log_content(
     if log_file_path.exists():
         return FileResponse(log_file_path, media_type="text/plain")
     else:
-        return {"error": "Log doesn't exists"}
+        return {"error": "Log doesn't exists."}
