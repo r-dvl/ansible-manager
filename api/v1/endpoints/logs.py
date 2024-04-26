@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 import subprocess
 from datetime import date
 from pathlib import Path
