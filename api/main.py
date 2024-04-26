@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from v1.endpoints import foo
+from api.v1.endpoints import crontab
 
 
 app = FastAPI()
@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(foo.router, prefix="/v1/foo", tags=["foo"])
+app.include_router(crontab.router, prefix="/v1/crontab", tags=["crontab"])
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
