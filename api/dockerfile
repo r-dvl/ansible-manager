@@ -4,7 +4,6 @@ LABEL org.opencontainers.image.source = "https://github.com/r-dvl/ansible-manage
 LABEL org.opencontainers.image.description "Ansible Manager API"
 
 # Setup
-ENV SECRET_KEY=secret
 WORKDIR /api
 
 # Install dependencies
