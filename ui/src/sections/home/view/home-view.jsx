@@ -19,6 +19,10 @@ export default function HomeView() {
         Hi, Welcome back 👋
       </Typography>
 
+      <Typography variant="subtitle1" sx={{ mb: 5 }}>
+        This is what you missed this week...
+      </Typography>
+
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <HomeWidgetSummary

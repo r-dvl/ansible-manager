@@ -31,7 +31,7 @@ export default function HomeExecutionStatistics({ title, subheader, chart, ...ot
       y: {
         formatter: (value) => {
           if (typeof value !== 'undefined') {
-            return `${value.toFixed(0)} visits`;
+            return `${value.toFixed(0)} jobs`;
           }
           return value;
         },
