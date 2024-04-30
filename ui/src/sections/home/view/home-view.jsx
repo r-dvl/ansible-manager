@@ -20,7 +20,7 @@ export default function HomeView() {
   const [executionsError, setExecutionsError] = useState(null);
 
   useEffect(() => {
-    fetch('https://ansible.api.rdvl-server.site/v1/logs/execution-statistics?year=2024')
+    fetch('https://ansible.rdvl-server.site/api/v1/logs/execution-statistics?year=2024')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching execution statistics');
@@ -30,7 +30,7 @@ export default function HomeView() {
       .then(data => setExecutionStatistics(data))
       .catch(error => setStatisticsError(error.message));
 
-    fetch('https://ansible.api.rdvl-server.site/v1/logs/last-executions')
+    fetch('https://ansible.rdvl-server.site/api/v1/logs/last-executions')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching latest executions');
