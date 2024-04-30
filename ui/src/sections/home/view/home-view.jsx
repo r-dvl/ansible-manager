@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import React, { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,21 +14,36 @@ import HomeExecutionStatistics from '../home-execution-statistics';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
+  const [executionStatistics, setExecutionStatistics] = useState({});
+
+  useEffect(() => {
+    fetch(`http://192.168.1.41:8080/v1/logs/execution-statistics?year=2024`)
+      .then(response => response.json())
+      .then(data => setExecutionStatistics(data));
+  }, []);
+
+  if (!executionStatistics.global) {
+    return <div>Cargando...</div>;
+  }
+
+  const playbookSeries = Object.entries(executionStatistics)
+    .filter(([playbook]) => playbook !== 'global')
+    .map(([playbook, data]) => ({
+      label: playbook,
+      value: data.total.reduce((a, b) => a + b, 0),
+    }));
+
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" sx={{ mb: 5 }}>
         Hi, Welcome back 👋
       </Typography>
 
-      <Typography variant="subtitle1" sx={{ mb: 5 }}>
-        This is what you missed this week...
-      </Typography>
-
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <HomeWidgetSummary
             title="Jobs run"
-            total={100}
+            total={executionStatistics.global.total.reduce((a, b) => a + b, 0)}
             color="info"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
           />
@@ -36,7 +52,7 @@ export default function HomeView() {
         <Grid xs={12} sm={6} md={3}>
           <HomeWidgetSummary
             title="Success"
-            total={90}
+            total={executionStatistics.global.success.reduce((a, b) => a + b, 0)}
             color="success"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
           />
@@ -45,7 +61,7 @@ export default function HomeView() {
         <Grid xs={12} sm={6} md={3}>
           <HomeWidgetSummary
             title="Failed"
-            total={10}
+            total={executionStatistics.global.failed.reduce((a, b) => a + b, 0)}
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
           />
@@ -54,7 +70,7 @@ export default function HomeView() {
         <Grid xs={12} sm={6} md={3}>
           <HomeWidgetSummary
             title="Ratio"
-            total={90}
+            total={Math.round((executionStatistics.global.success.reduce((a, b) => a + b, 0) / executionStatistics.global.total.reduce((a, b) => a + b, 0)) * 100)}
             color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
           />
@@ -82,21 +98,21 @@ export default function HomeView() {
               series: [
                 {
                   name: 'Success',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 40],
+                  type: 'area',
+                  fill: 'gradient',
+                  data: executionStatistics.global.success,
                 },
                 {
                   name: 'Failed',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43, 30],
+                  data: executionStatistics.global.failed,
                 },
                 {
                   name: 'Total',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 70],
+                  type: 'column',
+                  fill: 'solid',
+                  data: executionStatistics.global.total,
                 },
               ],
             }}
@@ -105,14 +121,9 @@ export default function HomeView() {
 
         <Grid xs={12} md={6} lg={4}>
           <HomePlaybooks
-            title="Playbooks"
+            title="Playbooks Chart"
             chart={{
-              series: [
-                { label: 'Maintenance', value: 4344 },
-                { label: 'Backup', value: 5435 },
-                { label: 'Cleanup', value: 1443 },
-                { label: 'Lookup', value: 4443 },
-              ],
+              series: playbookSeries,
             }}
           />
         </Grid>

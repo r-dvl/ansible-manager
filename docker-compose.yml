@@ -8,14 +8,14 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      -/home/ansible/logs:/logs
+      - ./home/ansible/logs:/logs
 
   ui:
     container_name: ansible-manager-ui
     restart: unless-stopped
     build:
       context: ./ui
+      args:
+        - API_URL=http://localhost:8080
     ports:
-      - '8081:3000'
-    environment:
-      - REACT_APP_API_URL=http://localhost:8080
+      - '3000:3000'
