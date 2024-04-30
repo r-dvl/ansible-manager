@@ -17,7 +17,7 @@ export default function HomeView() {
   const [executionStatistics, setExecutionStatistics] = useState({});
 
   useEffect(() => {
-    fetch(`http://192.168.1.41:8080/v1/logs/execution-statistics?year=2024`)
+    fetch(`http://192.168.1.39:8080/v1/logs/execution-statistics?year=2024`)
       .then(response => response.json())
       .then(data => setExecutionStatistics(data));
   }, []);
