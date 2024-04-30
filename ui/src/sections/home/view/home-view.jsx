@@ -63,7 +63,7 @@ export default function HomeView() {
         <Grid xs={12} md={6} lg={8}>
           <HomeExecutionStatistics
             title="Execution Statistics"
-            subheader="(+43%) than last year"
+            subheader="This year"
             chart={{
               labels: [
                 '01/01/2024',
@@ -84,19 +84,19 @@ export default function HomeView() {
                   name: 'Success',
                   type: 'column',
                   fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 40],
                 },
                 {
                   name: 'Failed',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43, 30],
                 },
                 {
                   name: 'Total',
                   type: 'area',
                   fill: 'gradient',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 70],
                 },
               ],
             }}
@@ -121,9 +121,9 @@ export default function HomeView() {
           <HomeLatestExecutions
             title="Latest Executions"
             list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: faker.person.jobTitle(),
-              description: faker.commerce.productDescription(),
+              id: "001",
+              title: "Backup",
+              description: "Success",
               image: `/assets/images/covers/cover_${index + 1}.jpg`,
               postedAt: faker.date.recent(),
             }))}
@@ -136,11 +136,11 @@ export default function HomeView() {
             list={[...Array(5)].map((_, index) => ({
               id: faker.string.uuid(),
               title: [
-                '1983, orders, $4220',
-                '12 Invoices have been paid',
-                'Order #37745 from September',
-                'New order placed #XF-2356',
-                'New order placed #XF-2346',
+                'Backup',
+                'Host Maintenance',
+                'Cleanup',
+                'Lookup',
+                'Sync',
               ][index],
               type: `order${index + 1}`,
               time: faker.date.past(),
