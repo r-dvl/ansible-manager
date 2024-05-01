@@ -42,7 +42,7 @@ export default function HomeView() {
       .then(data => setLatestExecutions(data))
       .catch(error => setExecutionsError(error.message));
 
-    fetch('https://ansible-api.rdvl-server.site/v1/crontab/read?filename=ansible')
+    fetch('https://ansible-api.rdvl-server.site/v1/crontab/read?crontab=/crontabs/ansible')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching next executions');
@@ -51,8 +51,8 @@ export default function HomeView() {
       })
       .then(data => {
         try {
-          const nextExecutionsData = Object.entries(data.crontab).map(([task_name, { description, datetime }], index) => {
-            const interval = cronParser.parseExpression(datetime);
+          const nextExecutionsData = Object.entries(data.crontab).map(([description, cron_expression, task_name], index) => {
+            const interval = cronParser.parseExpression(cron_expression);
             const nextDate = interval.next().toDate();
             return {
               id: task_name,
