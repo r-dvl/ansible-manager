@@ -1,9 +1,11 @@
 import cronParser from 'cron-parser';
 import React, { useState, useEffect } from 'react';
 
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import HomePlaybooks from '../home-playbooks';
 import HomeWidgetSummary from '../home-widget-summary';
@@ -20,9 +22,10 @@ export default function HomeView() {
   const [executionsError, setExecutionsError] = useState(null);
   const [nextExecutions, setNextExecutions] = useState([]);
   const [nextExecutionsError, setNextExecutionsError] = useState(null);
+  const apiUrl = 'https://ansible-api.rdvl-server.site'
 
   useEffect(() => {
-    fetch('https://ansible-api.rdvl-server.site/v1/logs/execution-statistics?year=2024')
+    fetch(`${apiUrl}/v1/logs/execution-statistics?year=2024`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching execution statistics');
@@ -32,7 +35,7 @@ export default function HomeView() {
       .then(data => setExecutionStatistics(data))
       .catch(error => setStatisticsError(error.message));
 
-    fetch('https://ansible-api.rdvl-server.site/v1/logs/last-executions')
+    fetch(`${apiUrl}/v1/logs/last-executions`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching latest executions');
@@ -42,7 +45,7 @@ export default function HomeView() {
       .then(data => setLatestExecutions(data))
       .catch(error => setExecutionsError(error.message));
 
-    fetch('https://ansible-api.rdvl-server.site/v1/crontab/read?crontab=/crontabs/ansible')
+    fetch(`${apiUrl}/v1/crontab/read?crontab=/crontabs/ansible`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching next executions');
@@ -51,7 +54,7 @@ export default function HomeView() {
       })
       .then(data => {
         try {
-          const nextExecutionsData = Object.entries(data.crontab).map(([description, cron_expression, task_name], index) => {
+          const nextExecutionsData = data.crontab.map(({ description, cron_expression, task_name }, index) => {
             const interval = cronParser.parseExpression(cron_expression);
             const nextDate = interval.next().toDate();
             return {
@@ -71,19 +74,55 @@ export default function HomeView() {
   }, []);
 
   if (statisticsError) {
-    return <div>Error fetching execution statistics: {statisticsError}</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        Error fetching execution statistics: {statisticsError}
+      </Box>
+    );
   }
 
   if (executionsError) {
-    return <div>Error fetching latest executions: {executionsError}</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        Error fetching latest executions: {executionsError}
+      </Box>
+    );
   }
 
   if (!executionStatistics.global) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   };
 
   if (nextExecutionsError) {
-    return <div>Error fetching next executions: {nextExecutionsError}</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        Error fetching next executions: {nextExecutionsError}
+      </Box>
+    );
   }
 
   const playbookSeries = Object.entries(executionStatistics)
@@ -105,7 +144,7 @@ export default function HomeView() {
             title="Jobs run"
             total={executionStatistics.global.total.reduce((a, b) => a + b, 0)}
             color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+            icon={<img alt="icon" src="/assets/icons/jobs/play.svg" />}
           />
         </Grid>
 
@@ -114,7 +153,7 @@ export default function HomeView() {
             title="Success"
             total={executionStatistics.global.success.reduce((a, b) => a + b, 0)}
             color="success"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+            icon={<img alt="icon" src="/assets/icons/jobs/success.svg" />}
           />
         </Grid>
 
@@ -123,7 +162,7 @@ export default function HomeView() {
             title="Failed"
             total={executionStatistics.global.failed.reduce((a, b) => a + b, 0)}
             color="error"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+            icon={<img alt="icon" src="/assets/icons/jobs/failed.svg" />}
           />
         </Grid>
 
@@ -132,7 +171,7 @@ export default function HomeView() {
             title="Ratio"
             total={Math.round((executionStatistics.global.success.reduce((a, b) => a + b, 0) / executionStatistics.global.total.reduce((a, b) => a + b, 0)) * 100)}
             color="warning"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+            icon={<img alt="icon" src="/assets/icons/jobs/ratio.svg" />}
           />
         </Grid>
 
@@ -197,7 +236,7 @@ export default function HomeView() {
                 id: `${execution.playbook}-${execution.datetime}-${index}`,
                 title: execution.playbook,
                 description: execution.status,
-                image: `/assets/icons/jobs/${execution.status}.png`,
+                image: `/assets/icons/jobs/${execution.status}.svg`,
                 postedAt: dateObject,
               };
             })}

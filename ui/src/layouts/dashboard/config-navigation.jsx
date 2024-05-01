@@ -10,27 +10,27 @@ const navConfig = [
   {
     title: 'home',
     path: '/',
-    icon: icon('ic_disabled'),
+    icon: icon('home'),
   },
   {
     title: 'playbooks',
-    path: '/products',
-    icon: icon('ic_cart'),
+    path: '/playbooks',
+    icon: icon('playbooks'),
   },
   {
     title: 'hosts',
-    path: '/blog',
-    icon: icon('ic_blog'),
+    path: '/hosts',
+    icon: icon('hosts'),
   },
   {
     title: 'user',
     path: '/user',
-    icon: icon('ic_user'),
+    icon: icon('user'),
   },
   {
     title: 'login',
     path: '/login',
-    icon: icon('ic_lock'),
+    icon: icon('login'),
   },
 ];
 
