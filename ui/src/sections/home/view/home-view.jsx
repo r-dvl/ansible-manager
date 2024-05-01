@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import cronParser from 'cron-parser';
 import React, { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
@@ -18,6 +18,8 @@ export default function HomeView() {
   const [latestExecutions, setLatestExecutions] = useState([]);
   const [statisticsError, setStatisticsError] = useState(null);
   const [executionsError, setExecutionsError] = useState(null);
+  const [nextExecutions, setNextExecutions] = useState([]);
+  const [nextExecutionsError, setNextExecutionsError] = useState(null);
 
   useEffect(() => {
     fetch('https://ansible-api.rdvl-server.site/v1/logs/execution-statistics?year=2024')
@@ -39,6 +41,33 @@ export default function HomeView() {
       })
       .then(data => setLatestExecutions(data))
       .catch(error => setExecutionsError(error.message));
+
+    fetch('https://ansible-api.rdvl-server.site/v1/crontab/read?filename=ansible')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error fetching next executions');
+        }
+        return response.json();
+      })
+      .then(data => {
+        try {
+          const nextExecutionsData = Object.entries(data.crontab).map(([task_name, { description, datetime }], index) => {
+            const interval = cronParser.parseExpression(datetime);
+            const nextDate = interval.next().toDate();
+            return {
+              id: task_name,
+              title: task_name,
+              description,
+              type: `order${index + 1}`,
+              time: nextDate,
+            };
+          });
+          setNextExecutions(nextExecutionsData);
+        } catch (error) {
+          setNextExecutionsError(error.message);
+        }
+      })
+      .catch(error => setNextExecutionsError(error.message));
   }, []);
 
   if (statisticsError) {
@@ -52,6 +81,10 @@ export default function HomeView() {
   if (!executionStatistics.global) {
     return <div>Loading...</div>;
   };
+
+  if (nextExecutionsError) {
+    return <div>Error fetching next executions: {nextExecutionsError}</div>;
+  }
 
   const playbookSeries = Object.entries(executionStatistics)
     .filter(([playbook]) => playbook !== 'global')
@@ -159,7 +192,6 @@ export default function HomeView() {
           <HomeLatestExecutions
             title="Latest Executions"
             list={latestExecutions.map((execution, index) => {
-              // Convertir el string datetime a un objeto Date
               const dateObject = new Date(execution.datetime);
               return {
                 id: `${execution.playbook}-${execution.datetime}-${index}`,
@@ -175,17 +207,12 @@ export default function HomeView() {
         <Grid xs={12} md={6} lg={4}>
           <HomeNextExecutions
             title="Next Executions"
-            list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: [
-                'Backup',
-                'Host Maintenance',
-                'Cleanup',
-                'Lookup',
-                'Sync',
-              ][index],
-              type: `order${index + 1}`,
-              time: faker.date.past(),
+            list={nextExecutions.map(({ id, title, description, type, time }) => ({
+              id,
+              title,
+              description,
+              type,
+              time,
             }))}
           />
         </Grid>
