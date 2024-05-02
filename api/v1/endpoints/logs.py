@@ -106,27 +106,27 @@ def last_executions():
             # Obtener todas las subcarpetas en la carpeta del playbook
             subfolders = [f for f in playbook.iterdir() if f.is_dir()]
 
-        for folder in subfolders:
-            for log_file in folder.glob('*.log'):
-                with open(log_file, 'r') as file:
-                    log_content = file.read()
-                    if 'failed=0' in log_content:
-                        status = 'success'
-                    else:
-                        status = 'failed'
-                    # Extraer la fecha y la hora de la ejecución del nombre del archivo
-                    date_str = folder.name
-                    time_str = log_file.stem
-                    # Parsear la fecha y la hora
-                    datetime_obj = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H-%M-%S")
-                    # Convertir la fecha y la hora a un formato que JavaScript pueda manejar
-                    datetime_str = datetime_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                    # Agregar la ejecución a la lista
-                    executions.append({
-                        "playbook": playbook.name,
-                        "status": status,
-                        "datetime": datetime_str,
-                    })
+            for folder in subfolders:
+                for log_file in folder.glob('*.log'):
+                    with open(log_file, 'r') as file:
+                        log_content = file.read()
+                        if 'failed=0' in log_content:
+                            status = 'success'
+                        else:
+                            status = 'failed'
+                        # Extraer la fecha y la hora de la ejecución del nombre del archivo
+                        date_str = folder.name
+                        time_str = log_file.stem
+                        # Parsear la fecha y la hora
+                        datetime_obj = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H-%M-%S")
+                        # Convertir la fecha y la hora a un formato que JavaScript pueda manejar
+                        datetime_str = datetime_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+                        # Agregar la ejecución a la lista
+                        executions.append({
+                            "playbook": playbook.name,
+                            "status": status,
+                            "datetime": datetime_str,
+                        })
 
         # Ordenar las ejecuciones por fecha y hora y tomar las últimas 5
         executions.sort(key=lambda x: x["datetime"], reverse=True)
