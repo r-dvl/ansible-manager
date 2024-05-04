@@ -4,6 +4,9 @@ import re
 
 router = APIRouter()
 
+# Crontabs path
+path = '/crontabs'
+
 @router.get("/read")
 def get_crontab(crontab: str = Query(..., description="Crontab name")):
     '''
@@ -31,7 +34,7 @@ def get_crontab(crontab: str = Query(..., description="Crontab name")):
         if not crontab:
             raise HTTPException(status_code=400, detail="File name not specified")
 
-        with open(crontab, 'r') as f:
+        with open(f"{path}/{crontab}", 'r') as f:
             crontab_output = f.read()
 
         crontab_lines = crontab_output.strip().split("\n")

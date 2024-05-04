@@ -1,6 +1,6 @@
 {
   "short_name": "Ansible Manager",
-  "name": "Ansible Manager Dashboard",
+  "name": "Ansible Manager",
   "icons": [
     {
       "src": "favicon/android-chrome-192x192.png",

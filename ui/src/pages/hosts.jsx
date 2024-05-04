@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { AppView } from 'src/sections/overview/view';
+import { HostsView } from 'src/sections/hosts/view';
 
 // ----------------------------------------------------------------------
 
-export default function AppPage() {
+export default function HostsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Hosts | Ansible Manager </title>
       </Helmet>
 
-      <AppView />
+      <HostsView />
     </>
   );
 }

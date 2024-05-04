@@ -7,6 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import apiUrl from '../../../../config';
 import HomePlaybooks from '../home-playbooks';
 import HomeWidgetSummary from '../home-widget-summary';
 import HomeNextExecutions from '../home-next-executions';
@@ -22,7 +23,6 @@ export default function HomeView() {
   const [executionsError, setExecutionsError] = useState(null);
   const [nextExecutions, setNextExecutions] = useState([]);
   const [nextExecutionsError, setNextExecutionsError] = useState(null);
-  const apiUrl = 'https://ansible-manager-api.rdvl-server.site'
 
   useEffect(() => {
     fetch(`${apiUrl}/v1/logs/execution-statistics?year=2024`)
@@ -45,7 +45,7 @@ export default function HomeView() {
       .then(data => setLatestExecutions(data))
       .catch(error => setExecutionsError(error.message));
 
-    fetch(`${apiUrl}/v1/crontab/read?crontab=/crontabs/ansible`)
+    fetch(`${apiUrl}/v1/crontab/read?crontab=ansible`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching next executions');

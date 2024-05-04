@@ -6,6 +6,9 @@ from pathlib import Path
 
 router = APIRouter()
 
+# Logs Path
+path = Path("/logs")
+
 @router.get("/get-log-content")
 def get_log_content(
     date: date = Query(..., description="Date (YYYY-MM-DD)"),
@@ -45,8 +48,6 @@ def execution_statistics(
     dict: A dictionary containing execution statistics for each playbook and globally.
     dict: An error message if the logs directory does not exist.
     '''
-    path = Path("/logs/")
-
     if path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
         playbooks = [f for f in path.iterdir() if f.is_dir()]
@@ -122,8 +123,6 @@ def last_executions():
     list: A list of dictionaries, each containing information about an execution.
     dict: An error message if the logs directory does not exist.
     '''
-    path = Path("/logs/")
-
     if path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
         playbooks = [f for f in path.iterdir() if f.is_dir()]
