@@ -2,8 +2,7 @@ from fastapi import APIRouter, Query
 from fastapi.responses import FileResponse
 from datetime import date, datetime
 from pathlib import Path
-import os
-import re
+
 
 router = APIRouter()
 
@@ -13,6 +12,18 @@ def get_log_content(
     time: str = Query(..., description="Time (hh-mm-ss)"),
     playbook: str = Query(..., description="Playbook name")
 ):
+    '''
+    Fetches the content of a log file.
+
+    Parameters:
+    date (date): The date when the log was created.
+    time (str): The time when the log was created.
+    playbook (str): The name of the playbook.
+
+    Returns:
+    FileResponse: The content of the log file as a text file.
+    dict: An error message if the log file does not exist.
+    '''
     log_file_path = Path(f"/logs/{playbook}/{date}/{time}.log")
 
     if log_file_path.exists():
@@ -24,24 +35,34 @@ def get_log_content(
 def execution_statistics(
     year: str = Query(..., description="Year to fetch"),
 ):
+    '''
+    Fetches execution statistics for a given year.
+
+    Parameters:
+    year (str): The year to fetch statistics for.
+
+    Returns:
+    dict: A dictionary containing execution statistics for each playbook and globally.
+    dict: An error message if the logs directory does not exist.
+    '''
     path = Path("/logs/")
 
     if path.exists():
-        # Obtener todas las carpetas de playbook en la carpeta
+        # Obtain folders inside /logs/ (Every playbook logs)
         playbooks = [f for f in path.iterdir() if f.is_dir()]
 
         results = {}
 
-        # Crear contadores para el total global
+        # Global statistics counters
         global_total_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
         global_success_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
         global_failed_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
 
         for playbook in playbooks:
-            # Obtener todas las subcarpetas en la carpeta del playbook
+            # Obtain every subfolder inside playook logs (Dates)
             subfolders = [f for f in playbook.iterdir() if f.is_dir()]
 
-            # Crear contadores para total, exitosas y fallidas
+            # Playbook statistics counters
             total_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
             success_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
             failed_counts = {f"{year}-{month:02}": 0 for month in range(1, 13)}
@@ -49,7 +70,7 @@ def execution_statistics(
             for folder in subfolders:
                 if folder.name.startswith(year):
                     for log_file in folder.glob('*.log'):
-                        # Incrementar el total de ejecuciones para este mes
+                        # Increase total statistics
                         total_counts[folder.name[:7]] += 1
                         global_total_counts[folder.name[:7]] += 1
 
@@ -64,24 +85,24 @@ def execution_statistics(
                                 failed_counts[folder.name[:7]] += 1
                                 global_failed_counts[folder.name[:7]] += 1
 
-            # Crear arrays para total, ejecuciones exitosas y fallidas
+            # Playbook statistics
             total_executions_per_month = [total_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
             success_executions_per_month = [success_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
             failed_executions_per_month = [failed_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
 
-            # Agregar los resultados para este playbook al resultado final
+            # Add Playbook
             results[playbook.name] = {
                 "total": total_executions_per_month,
                 "success": success_executions_per_month,
                 "failed": failed_executions_per_month
             }
 
-        # Crear arrays para el total global
+        # Global statistics
         global_total_executions_per_month = [global_total_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
         global_success_executions_per_month = [global_success_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
         global_failed_executions_per_month = [global_failed_counts.get(f"{year}-{month:02}", 0) for month in range(1, 13)]
 
-        # Agregar los resultados globales al resultado final
+        # Add global results to list
         results["global"] = {
             "total": global_total_executions_per_month,
             "success": global_success_executions_per_month,
@@ -94,16 +115,23 @@ def execution_statistics(
 
 @router.get("/last-executions")
 def last_executions():
+    '''
+    Fetches the last five executions.
+
+    Returns:
+    list: A list of dictionaries, each containing information about an execution.
+    dict: An error message if the logs directory does not exist.
+    '''
     path = Path("/logs/")
 
     if path.exists():
-        # Obtener todas las carpetas de playbook en la carpeta
+        # Obtain folders inside /logs/ (Every playbook logs)
         playbooks = [f for f in path.iterdir() if f.is_dir()]
 
         executions = []
 
         for playbook in playbooks:
-            # Obtener todas las subcarpetas en la carpeta del playbook
+            # Obtain every subfolder inside playook logs (Dates)
             subfolders = [f for f in playbook.iterdir() if f.is_dir()]
 
             for folder in subfolders:
@@ -114,21 +142,22 @@ def last_executions():
                             status = 'success'
                         else:
                             status = 'failed'
-                        # Extraer la fecha y la hora de la ejecución del nombre del archivo
+                        # Get date and time from folder and log file
                         date_str = folder.name
                         time_str = log_file.stem
-                        # Parsear la fecha y la hora
+                        # Parse time
                         datetime_obj = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H-%M-%S")
-                        # Convertir la fecha y la hora a un formato que JavaScript pueda manejar
+                        # JavaScript expected format
                         datetime_str = datetime_obj.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                        # Agregar la ejecución a la lista
+                        # Add execution to list
                         executions.append({
                             "playbook": playbook.name,
                             "status": status,
                             "datetime": datetime_str,
                         })
 
-        # Ordenar las ejecuciones por fecha y hora y tomar las últimas 5
+        # Order by date and time and return last 5 executions
+        # TODO: Number of executions to fetch as endpoint parameter
         executions.sort(key=lambda x: x["datetime"], reverse=True)
         last_executions = executions[:5]
 
