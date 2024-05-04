@@ -22,7 +22,7 @@ export default function HomeView() {
   const [executionsError, setExecutionsError] = useState(null);
   const [nextExecutions, setNextExecutions] = useState([]);
   const [nextExecutionsError, setNextExecutionsError] = useState(null);
-  const apiUrl = 'https://ansible-api.rdvl-server.site'
+  const apiUrl = 'https://ansible-manager-api.rdvl-server.site'
 
   useEffect(() => {
     fetch(`${apiUrl}/v1/logs/execution-statistics?year=2024`)
