@@ -4,7 +4,7 @@ import yaml
 router = APIRouter()
 
 # Hosts path
-path = '/inventories/hosts.yaml'
+path = '/ansible-playbooks/inventories/hosts.yaml'
 
 @router.get("/read")
 def get_hosts():
@@ -18,4 +18,4 @@ def get_hosts():
                     hosts_info[host]['group'] = group
             return hosts_info
         except yaml.YAMLError as exc:
-            return {"error": "Log doesn't exists."}
+            return {"error": "Hosts file doesn't exists."}
