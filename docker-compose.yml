@@ -20,3 +20,6 @@ services:
         - API_URL=http://localhost:8080
     ports:
       - '3000:3000'
+    environment:
+      - USERNAME=admin
+      - PASSWORD=admin
