@@ -31,11 +31,13 @@ export default function ShopProductCard({ host }) {
       alt={host.name}
       src='/assets/images/hosts/server.svg'
       sx={{
-        top: 10,
-        width: 1,
-        height: 1,
+        top: '50%',
+        left: '50%',
+        width: '50%',
+        height: '50%',
         objectFit: 'cover',
         position: 'absolute',
+        transform: 'translate(-50%, -50%)',
       }}
     />
   );
