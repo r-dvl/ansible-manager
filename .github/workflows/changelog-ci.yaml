@@ -13,3 +13,5 @@ jobs:
 
       - name: Run Changelog CI
         uses: saadmk11/changelog-ci@v1.1.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
