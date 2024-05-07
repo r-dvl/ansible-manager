@@ -60,6 +60,15 @@ jobs:
     permissions: write-all
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get release notes
+        id: release_notes
+        run: |
+          RELEASE_NOTES=$(awk -v version=${{ needs.build-and-push.outputs.tag }} '/## \[/{flag=0} /## \['$version'\]/{flag=1} flag' CHANGELOG.md)
+          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -68,5 +77,7 @@ jobs:
         with:
           tag_name: ${{ needs.build-and-push.outputs.tag }}
           release_name: Release ${{ needs.build-and-push.outputs.tag }}
+          body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
+
