@@ -7,7 +7,6 @@ export const HomePage = lazy(() => import('src/pages/home'));
 export const HostsPage = lazy(() => import('src/pages/hosts'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const LoginPage = lazy(() => import('src/pages/login'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 export default function Router() {
