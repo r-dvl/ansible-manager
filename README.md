@@ -7,7 +7,6 @@ Lightweight Ansible dashboard that shows executed and future jobs executions and
 2. [Configuration](#Configuration)
 
 
-
 ## Views
 ### Home
 In progress..
@@ -21,7 +20,7 @@ In progress..
 In progress..
 
 
-### Users
+### User
 In progress..
 
 
