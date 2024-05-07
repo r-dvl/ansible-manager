@@ -44,7 +44,7 @@ def get_crontab(crontab: str = Query(..., description="Crontab name")):
             if line.startswith("#"):
                 description = line[2:]
             else:
-                match = re.match(r"(\S+ \S+ \S+ \S+ \S+) /home/ansible/scripts/(.+)\.sh", line)
+                match = re.match(r"(\S+ \S+ \S+ \S+ \S+) /home/ansible/ansible-playbooks/scripts/(.+)\.sh", line)
                 if match:
                     cron_expression, task_name = match.groups()
                     crontab_data.append({
