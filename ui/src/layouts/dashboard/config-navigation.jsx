@@ -22,16 +22,6 @@ const navConfig = [
     path: '/hosts',
     icon: icon('hosts'),
   },
-  {
-    title: 'user',
-    path: '/user',
-    icon: icon('user'),
-  },
-  {
-    title: 'login',
-    path: '/login',
-    icon: icon('login'),
-  },
 ];
 
 export default navConfig;
