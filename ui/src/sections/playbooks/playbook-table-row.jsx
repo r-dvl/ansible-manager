@@ -16,14 +16,14 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
+export default function PlaybookTableRow({
   selected,
   name,
   avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
+  schedule,
+  description,
+  hosts,
+  play,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -38,7 +38,7 @@ export default function UserTableRow({
 
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow hover tabIndex={-1} lastExecution="checkbox" selected={selected}>
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
@@ -52,14 +52,14 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{schedule}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell>{description}</TableCell>
 
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
+        <TableCell align="center">{hosts}</TableCell>
 
         <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
+          <Label color={(play === 'banned' && 'error') || 'success'}>{play}</Label>
         </TableCell>
 
         <TableCell align="right">
@@ -93,13 +93,13 @@ export default function UserTableRow({
   );
 }
 
-UserTableRow.propTypes = {
+PlaybookTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+  schedule: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
+  hosts: PropTypes.any,
   name: PropTypes.any,
-  role: PropTypes.any,
+  description: PropTypes.any,
   selected: PropTypes.any,
-  status: PropTypes.string,
+  play: PropTypes.string,
 };

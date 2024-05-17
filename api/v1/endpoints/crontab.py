@@ -59,3 +59,39 @@ def get_crontab(crontab: str = Query(..., description="Crontab name")):
         return {"error": f"{crontab} crontab not found."}
     except Exception as e:
         return {"error": str(e)}
+
+@router.get("/get-task")
+def get_crontab(
+    crontab: str = Query(..., description="Crontab name"),
+    task: str = Query(..., description="script to fetch")
+):
+    try:
+        if not crontab:
+            raise HTTPException(status_code=400, detail="File name not specified")
+
+        with open(f"{path}/{crontab}", 'r') as f:
+            crontab_output = f.read()
+
+        crontab_lines = crontab_output.strip().split("\n")
+        task_data = []
+        description = ""
+        for line in crontab_lines:
+            if line.startswith("#"):
+                description = line[2:]
+            else:
+                match = re.match(r"(\S+ \S+ \S+ \S+ \S+) /home/ansible/ansible-playbooks/scripts/(.+)\.sh", line)
+                if match:
+                    cron_expression, task_name = match.groups()
+                    if task in task_name:
+                        task_data.append({
+                            "description": description,
+                            "cron_expression": cron_expression,
+                            "task_name": task_name
+                        })
+                    description = ""
+
+        return {"task": task_data}
+    except FileNotFoundError:
+        return {"error": f"{crontab} crontab not found."}
+    except Exception as e:
+        return {"error": str(e)}
