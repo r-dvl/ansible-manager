@@ -12,13 +12,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { users } from 'src/_mock/user';
-
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import apiUrl from '../../../../config';
 import TableNoData from '../table-no-data';
+import { apiUrl } from '../../../../config';
 import TableEmptyRows from '../table-empty-rows';
 import PlaybookTableRow from '../playbook-table-row';
 import PlaybookTableHead from '../playbook-table-head';
@@ -54,7 +52,7 @@ export default function PlaybooksPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = playbooks.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -168,7 +166,7 @@ export default function PlaybooksPage() {
               <PlaybookTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={playbooks.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}

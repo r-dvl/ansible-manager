@@ -7,7 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import apiUrl from '../../../../config';
+import { apiUrl } from '../../../../config';
 import HomePlaybooks from '../home-playbooks';
 import HomeWidgetSummary from '../home-widget-summary';
 import HomeNextExecutions from '../home-next-executions';

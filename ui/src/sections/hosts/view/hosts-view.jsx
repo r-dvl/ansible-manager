@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import HostsCard from '../hosts-card';
 import HostsSort from '../hosts-sort';
-import apiUrl from '../../../../config';
+import { apiUrl } from '../../../../config';
 import HostsFilters from '../hosts-filters';
 
 export default function HostsView() {

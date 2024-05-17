@@ -10,16 +10,12 @@ services:
     volumes:
       - /home/ansible/logs:/logs
       - /var/spool/cron/crontabs:/crontabs
+      - /home/ansible/ansible-playbooks:/ansible-playbooks
 
   ui:
     container_name: ansible-manager-ui
     restart: unless-stopped
     build:
       context: ./ui
-      args:
-        - API_URL=http://localhost:8080
     ports:
       - '3000:3000'
-    environment:
-      - USERNAME=admin
-      - PASSWORD=admin
