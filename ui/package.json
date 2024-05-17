@@ -1,7 +1,7 @@
 {
   "name": "ansible-manager",
   "author": "R-dVL",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "private": false,
   "scripts": {
     "dev": "vite",
