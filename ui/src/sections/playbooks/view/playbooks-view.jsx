@@ -203,7 +203,7 @@ export default function PlaybooksPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, playbooks.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -215,7 +215,7 @@ export default function PlaybooksPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={playbooks.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

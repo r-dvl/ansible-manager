@@ -33,7 +33,7 @@ export default function PlaybookTableToolbar({ numSelected, filterName, onFilter
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Search playbook..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify
