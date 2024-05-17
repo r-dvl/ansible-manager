@@ -99,8 +99,6 @@ export default function PlaybooksPage() {
     filterName,
   });
 
-  console.log("dataFiltered: ", dataFiltered)
-
   const notFound = !dataFiltered.length && !!filterName;
 
   useEffect(() => {
@@ -176,8 +174,8 @@ export default function PlaybooksPage() {
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'nextExecution', label: 'Next Execution' },
-                  { id: 'lastExecution', label: 'Last Execution' },
+                  { id: 'description', label: 'Description' },
+                  { id: 'schedule', label: 'Schedule' },
                   { id: 'hosts', label: 'Hosts', align: 'center' },
                   { id: 'play', label: 'Play' },
                   { id: '' },
@@ -186,19 +184,22 @@ export default function PlaybooksPage() {
               <TableBody>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((item) => (
-                    <PlaybookTableRow
-                      key={item[0].name}
-                      name={item[0].name}
-                      nextExecution="Mañana"
-                      play="Play"
-                      lastExecution="Pasao"
-                      avatarUrl={item[0].name}
-                      hosts={item[0].hosts}
-                      selected={selected.indexOf(item[0].name) !== -1}
-                      handleClick={(event) => handleClick(event, item[0].name)}
-                    />
-                  ))}
+                  .map((item, index) => {
+                    console.log(`Ítem ${index}:`, item);
+                    return (
+                      <PlaybookTableRow
+                        key={item.task_name}
+                        name={item.name}
+                        schedule={item.description}
+                        play="Play"
+                        description={item.cron_expression}
+                        avatarUrl={item.task_name}
+                        hosts={item.hosts}
+                        selected={selected.indexOf(item.name) !== -1}
+                        handleClick={(event) => handleClick(event, item.name)}
+                      />
+                    );
+                  })}
 
                 <TableEmptyRows
                   height={77}

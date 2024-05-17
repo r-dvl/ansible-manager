@@ -20,8 +20,8 @@ export default function PlaybookTableRow({
   selected,
   name,
   avatarUrl,
-  nextExecution,
-  lastExecution,
+  schedule,
+  description,
   hosts,
   play,
   handleClick,
@@ -52,9 +52,9 @@ export default function PlaybookTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{nextExecution}</TableCell>
+        <TableCell>{schedule}</TableCell>
 
-        <TableCell>{lastExecution}</TableCell>
+        <TableCell>{description}</TableCell>
 
         <TableCell align="center">{hosts}</TableCell>
 
@@ -95,11 +95,11 @@ export default function PlaybookTableRow({
 
 PlaybookTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  nextExecution: PropTypes.any,
+  schedule: PropTypes.any,
   handleClick: PropTypes.func,
   hosts: PropTypes.any,
   name: PropTypes.any,
-  lastExecution: PropTypes.any,
+  description: PropTypes.any,
   selected: PropTypes.any,
   play: PropTypes.string,
 };
