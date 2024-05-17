@@ -5,7 +5,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const HostsPage = lazy(() => import('src/pages/hosts'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const PlaybooksPage = lazy(() => import('src/pages/playbooks'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
@@ -30,7 +30,7 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'hosts', element: <HostsPage /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'playbooks', element: <PlaybooksPage /> },
       ],
     },
     {

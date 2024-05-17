@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -9,22 +10,24 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import apiUrl from '../../../../config';
 import TableNoData from '../table-no-data';
-import UserTableRow from '../user-table-row';
-import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
+import PlaybookTableRow from '../playbook-table-row';
+import PlaybookTableHead from '../playbook-table-head';
+import PlaybookTableToolbar from '../playbook-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function PlaybooksPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -36,6 +39,10 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [playbooks, setPlaybooks] = useState([]);
+
+  const [playbooksError, setPlaybooksError] = useState(null);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -87,25 +94,69 @@ export default function UserPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: playbooks,
     comparator: getComparator(order, orderBy),
     filterName,
   });
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  useEffect(() => {
+    fetch(`${apiUrl}/v1/playbooks/get-playbooks`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error fetching playbooks data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const playbooksArray = Object.keys(data).map(key => ({
+          name: key,
+          ...data[key]
+        }));
+        setPlaybooks(playbooksArray);
+      })
+      .catch(error => setPlaybooksError(error.message));
+  }, []);
+
+  if (playbooksError) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        Error fetching playbooks data: {playbooksError}
+      </Box>
+    );
+  }
+
+  if (!playbooks) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  };
+
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Playbooks</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
+          New Playbook
         </Button>
       </Stack>
 
       <Card>
-        <UserTableToolbar
+        <PlaybookTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -114,7 +165,7 @@ export default function UserPage() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
+              <PlaybookTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={users.length}
@@ -123,33 +174,36 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'description', label: 'Description' },
+                  { id: 'schedule', label: 'Schedule' },
+                  { id: 'hosts', label: 'Hosts', align: 'center' },
+                  { id: 'play', label: 'Play' },
                   { id: '' },
                 ]}
               />
               <TableBody>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
-                    />
-                  ))}
+                  .map((item, index) => {
+                    console.log(`Ítem ${index}:`, item);
+                    return (
+                      <PlaybookTableRow
+                        key={item.task_name}
+                        name={item.name}
+                        schedule={item.description}
+                        play="Play"
+                        description={item.cron_expression}
+                        avatarUrl={item.task_name}
+                        hosts={item.hosts}
+                        selected={selected.indexOf(item.name) !== -1}
+                        handleClick={(event) => handleClick(event, item.name)}
+                      />
+                    );
+                  })}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, playbooks.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -161,7 +215,7 @@ export default function UserPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={playbooks.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

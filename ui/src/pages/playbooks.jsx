@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { PlaybooksView } from 'src/sections/playbooks/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function PlaybooksPage() {
   return (
     <>
       <Helmet>
-        <title> User | Ansible Manager </title>
+        <title> Playbooks | Ansible Manager </title>
       </Helmet>
 
-      <UserView />
+      <PlaybooksView />
     </>
   );
 }
