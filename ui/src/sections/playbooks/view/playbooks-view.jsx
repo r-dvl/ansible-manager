@@ -15,8 +15,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import apiUrl from '../../../../config';
 import TableNoData from '../table-no-data';
+import { apiUrl } from '../../../../config';
 import TableEmptyRows from '../table-empty-rows';
 import PlaybookTableRow from '../playbook-table-row';
 import PlaybookTableHead from '../playbook-table-head';

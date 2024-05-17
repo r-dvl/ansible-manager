@@ -20,6 +20,8 @@ import { bgGradient } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
+import { username, password } from '../../../config';
+
 // ----------------------------------------------------------------------
 
 export default function LoginView({ onLogin }) {
@@ -27,14 +29,11 @@ export default function LoginView({ onLogin }) {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [usernameForm, setUsernameForm] = useState('');
+  const [passwordForm, setPasswordForm] = useState('');
 
   const handleClick = () => {
-    const user = 'admin';
-    const pass = 'admin';
-
-    if (email === user && password === pass) {
+    if (usernameForm === username && passwordForm === password) {
       onLogin();
       router.push('/');
     } else {
@@ -47,17 +46,17 @@ export default function LoginView({ onLogin }) {
       <Stack spacing={3}>
         <TextField
           name="user"
-          label="User name"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          label="Username"
+          value={usernameForm}
+          onChange={(e) => setUsernameForm(e.target.value)}
         />
 
         <TextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={passwordForm}
+          onChange={(e) => setPasswordForm(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -93,8 +92,7 @@ export default function LoginView({ onLogin }) {
     <Box
       sx={{
         ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
+          color: alpha(theme.palette.background.default, 0.9)
         }),
         height: 1,
       }}
