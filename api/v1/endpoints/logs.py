@@ -1,13 +1,14 @@
+import os
+from datetime import datetime
+from pathlib import Path
 from fastapi import APIRouter, Query
 from fastapi.responses import FileResponse
-from datetime import date, datetime
-from pathlib import Path
 
 
 router = APIRouter()
 
 # Logs Path
-path = Path("/logs")
+logs_path = Path(os.getenv('ANSIBLE_LOGS'))
 
 @router.get("/get-log-content")
 def get_log_content(
@@ -114,6 +115,7 @@ def execution_statistics(
     else:
         return {"error": "Path doesn't exists."}
 
+ # TODO: Number of executions to fetch as endpoint parameter
 @router.get("/last-executions")
 def last_executions():
     '''
@@ -156,7 +158,6 @@ def last_executions():
                         })
 
         # Order by date and time and return last 5 executions
-        # TODO: Number of executions to fetch as endpoint parameter
         executions.sort(key=lambda x: x["datetime"], reverse=True)
         last_executions = executions[:5]
 

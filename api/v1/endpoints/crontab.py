@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Query
 import re
+from pathlib import Path
+from fastapi import APIRouter, HTTPException, Query
 
 
 router = APIRouter()
 
-crontab_path = '/etc/cron.d/ansible'
+crontab_path = Path('/etc/cron.d/ansible')
 
 @router.get("/")
 def get_crontab():

@@ -1,12 +1,15 @@
-from fastapi import APIRouter
+import os
 import yaml
+from pathlib import Path
+from fastapi import APIRouter
+
 
 router = APIRouter()
 
 # Hosts path
-path = '/ansible-playbooks/inventories/hosts.yaml'
+hosts_path = Path(os.getenv('ANSIBLE_INVENTORY'))
 
-@router.get("/read")
+@router.get("/")
 def get_hosts():
     with open(path, 'r') as stream:
         try:
