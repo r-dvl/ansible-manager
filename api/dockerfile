@@ -10,6 +10,7 @@ ENV TZ=Europe/Madrid
 # Ansible vars
 ENV ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
 ENV ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
+ENV ANSIBLE_SCRIPTS=/ansible-playbooks/scripts
 ENV ANSIBLE_LOGS=/logs
 ENV VAULT_PASSWORD_FILE=/config/vault_password_file
 

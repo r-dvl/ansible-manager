@@ -26,7 +26,7 @@ export default function HostsView() {
   };
 
   useEffect(() => {
-    fetch(`${apiUrl}/v1/hosts/read`)
+    fetch(`${apiUrl}/v1/hosts/`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching hosts data');

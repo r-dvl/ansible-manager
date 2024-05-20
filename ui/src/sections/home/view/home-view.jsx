@@ -45,7 +45,7 @@ export default function HomeView() {
       .then(data => setLatestExecutions(data))
       .catch(error => setExecutionsError(error.message));
 
-    fetch(`${apiUrl}/v1/crontab/read?crontab=ansible`)
+    fetch(`${apiUrl}/v1/crontab/`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching next executions');

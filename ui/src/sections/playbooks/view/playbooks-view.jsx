@@ -100,7 +100,7 @@ export default function PlaybooksPage() {
   const notFound = !dataFiltered.length && !!filterName;
 
   useEffect(() => {
-    fetch(`${apiUrl}/v1/playbooks/get-playbooks`)
+    fetch(`${apiUrl}/v1/playbooks/`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error fetching playbooks data');

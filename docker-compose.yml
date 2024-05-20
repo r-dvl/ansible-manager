@@ -15,6 +15,7 @@ services:
     environment:
       - ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
       - ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
+      - ANSIBLE_SCRIPTS=/ansible-playbooks/scripts
       - ANSIBLE_LOGS=/logs
       - VAULT_PASSWORD_FILE=/config/vault_password_file
 

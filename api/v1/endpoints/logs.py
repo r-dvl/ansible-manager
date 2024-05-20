@@ -1,13 +1,14 @@
-from fastapi import APIRouter, Query
-from fastapi.responses import FileResponse
+import os
 from datetime import date, datetime
 from pathlib import Path
+from fastapi import APIRouter, Query
+from fastapi.responses import FileResponse
 
 
 router = APIRouter()
 
 # Logs Path
-path = Path("/logs")
+logs_path = Path(os.getenv('ANSIBLE_LOGS'))
 
 @router.get("/get-log-content")
 def get_log_content(
@@ -48,9 +49,9 @@ def execution_statistics(
     dict: A dictionary containing execution statistics for each playbook and globally.
     dict: An error message if the logs directory does not exist.
     '''
-    if path.exists():
+    if logs_path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
-        playbooks = [f for f in path.iterdir() if f.is_dir()]
+        playbooks = [f for f in logs_path.iterdir() if f.is_dir()]
 
         results = {}
 
@@ -114,6 +115,7 @@ def execution_statistics(
     else:
         return {"error": "Path doesn't exists."}
 
+ # TODO: Number of executions to fetch as endpoint parameter
 @router.get("/last-executions")
 def last_executions():
     '''
@@ -123,9 +125,9 @@ def last_executions():
     list: A list of dictionaries, each containing information about an execution.
     dict: An error message if the logs directory does not exist.
     '''
-    if path.exists():
+    if logs_path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
-        playbooks = [f for f in path.iterdir() if f.is_dir()]
+        playbooks = [f for f in logs_path.iterdir() if f.is_dir()]
 
         executions = []
 
@@ -156,7 +158,6 @@ def last_executions():
                         })
 
         # Order by date and time and return last 5 executions
-        # TODO: Number of executions to fetch as endpoint parameter
         executions.sort(key=lambda x: x["datetime"], reverse=True)
         last_executions = executions[:5]
 
