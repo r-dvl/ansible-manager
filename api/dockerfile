@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.description "Ansible Manager API"
 
 # Setup
 WORKDIR /api
+ENV TZ=Europe/Madrid
 
 # Ansible vars
 ENV ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
@@ -16,7 +17,7 @@ ENV VAULT_PASSWORD_FILE=/config/vault_password_file
 COPY ./requirements.txt /api/requirements.txt
 
 # Install Ansible and cron
-RUN apt-get update && apt-get install -y sshpass cron && \
+RUN apt-get update && apt-get install -y sshpass cron tzdata && \
     pip install --no-cache-dir --upgrade -r /api/requirements.txt && \
     pip install ansible
 
