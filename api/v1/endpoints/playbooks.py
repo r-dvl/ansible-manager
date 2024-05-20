@@ -10,7 +10,7 @@ router = APIRouter()
 # Playbooks path
 base_path = "/ansible-playbooks/playbooks/"
 scripts_path = "/ansible-playbooks/scripts/"
-crontab_path = '/crontabs/ansible'
+crontab_path = '/cron.d/ansible'
 
 @router.get("/get-playbooks")
 def get_playbooks():

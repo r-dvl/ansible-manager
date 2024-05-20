@@ -5,7 +5,7 @@ import re
 router = APIRouter()
 
 # Crontabs path
-path = '/crontabs'
+path = '/cron.d'
 
 @router.get("/read")
 def get_crontab(crontab: str = Query(..., description="Crontab name")):

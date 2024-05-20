@@ -15,8 +15,8 @@ ENV VAULT_PASSWORD_FILE=/config/vault_password_file
 # Install dependencies
 COPY ./requirements.txt /api/requirements.txt
 
-# Install Ansible
-RUN apt-get update && apt-get install -y sshpass && \
+# Install Ansible and cron
+RUN apt-get update && apt-get install -y sshpass cron && \
     pip install --no-cache-dir --upgrade -r /api/requirements.txt && \
     pip install ansible
 
@@ -27,4 +27,10 @@ COPY ./v1 /api/v1
 # API listener port
 EXPOSE 8080
 
-CMD ["python3", "./main.py"]
+# Start cron service
+RUN service cron start
+
+# Copy startup script
+COPY ./start.sh /start.sh
+
+CMD ["/bin/bash", "/start.sh"]
