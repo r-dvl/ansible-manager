@@ -6,6 +6,7 @@ LABEL org.opencontainers.image.description "Ansible Manager API"
 # Setup
 WORKDIR /api
 
+# Ansible vars
 ENV ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
 ENV ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
 ENV ANSIBLE_LOGS=/logs
@@ -13,6 +14,8 @@ ENV VAULT_PASSWORD_FILE=/config/vault_password_file
 
 # Install dependencies
 COPY ./requirements.txt /api/requirements.txt
+
+# Install Ansible
 RUN apt-get update && apt-get install -y sshpass && \
     pip install --no-cache-dir --upgrade -r /api/requirements.txt && \
     pip install ansible
