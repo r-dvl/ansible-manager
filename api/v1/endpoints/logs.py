@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from fastapi import APIRouter, Query
 from fastapi.responses import FileResponse
@@ -49,9 +49,9 @@ def execution_statistics(
     dict: A dictionary containing execution statistics for each playbook and globally.
     dict: An error message if the logs directory does not exist.
     '''
-    if path.exists():
+    if logs_path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
-        playbooks = [f for f in path.iterdir() if f.is_dir()]
+        playbooks = [f for f in logs_path.iterdir() if f.is_dir()]
 
         results = {}
 
@@ -125,9 +125,9 @@ def last_executions():
     list: A list of dictionaries, each containing information about an execution.
     dict: An error message if the logs directory does not exist.
     '''
-    if path.exists():
+    if logs_path.exists():
         # Obtain folders inside /logs/ (Every playbook logs)
-        playbooks = [f for f in path.iterdir() if f.is_dir()]
+        playbooks = [f for f in logs_path.iterdir() if f.is_dir()]
 
         executions = []
 

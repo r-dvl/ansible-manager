@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Query
 
 
 router = APIRouter()

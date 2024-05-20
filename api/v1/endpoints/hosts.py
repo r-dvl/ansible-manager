@@ -11,7 +11,7 @@ hosts_path = Path(os.getenv('ANSIBLE_INVENTORY'))
 
 @router.get("/")
 def get_hosts():
-    with open(path, 'r') as stream:
+    with open(hosts_path, 'r') as stream:
         try:
             data = yaml.safe_load(stream)
             hosts_info = {}

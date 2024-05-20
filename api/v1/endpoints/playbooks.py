@@ -22,7 +22,7 @@ def get_playbooks():
         return {"error": "The specified path does not exist."}
 
     # Fetch every playbook
-    yaml_files = glob.glob(os.path.join(playbooks_path, '/', '*.yaml'))
+    yaml_files = glob.glob(os.path.join(playbooks_path, '*.yaml'))
 
     playbooks = {}
 
