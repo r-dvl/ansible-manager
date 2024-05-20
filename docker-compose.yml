@@ -9,7 +9,7 @@ services:
       - 8080:8080
     volumes:
       - /DATA/AppData/ansible-manager/logs:/logs
-      - /DATA/AppData/ansible-manager/crontabs:/crontabs
+      - /DATA/AppData/ansible-manager/cron.d:/etc/cron.d
       - /DATA/AppData/ansible-manager/ansible-playbooks:/ansible-playbooks
       - /DATA/AppData/ansible-manager/config:/config
     environment:
