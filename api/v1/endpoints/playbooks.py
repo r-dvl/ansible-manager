@@ -10,7 +10,7 @@ router = APIRouter()
 # Playbooks path
 base_path = "/ansible-playbooks/playbooks/"
 scripts_path = "/ansible-playbooks/scripts/"
-crontab_path = '/cron.d/ansible'
+crontab_path = '/etc/cron.d/ansible'
 
 @router.get("/get-playbooks")
 def get_playbooks():
@@ -44,7 +44,7 @@ def get_playbooks():
                     if line.startswith("#"):
                         description = line[2:]
                     else:
-                        match = re.match(r"(\S+ \S+ \S+ \S+ \S+) /home/ansible/ansible-playbooks/scripts/(.+)\.sh", line)
+                        match = re.match(r"(\S+ \S+ \S+ \S+ \S+) /ansible-playbooks/scripts/(.+)\.sh", line)
                         if match:
                             cron_expression, task_name = match.groups()
                             if playbook_file_name in task_name:
