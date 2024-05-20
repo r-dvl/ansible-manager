@@ -6,11 +6,17 @@ services:
     build:
       context: ./api
     ports:
-      - '8080:8080'
+      - 8080:8080
     volumes:
-      - /home/ansible/logs:/logs
-      - /var/spool/cron/crontabs:/crontabs
-      - /home/ansible/ansible-playbooks:/ansible-playbooks
+      - /DATA/AppData/ansible-manager/logs:/logs
+      - /DATA/AppData/ansible-manager/crontabs:/crontabs
+      - /DATA/AppData/ansible-manager/ansible-playbooks:/ansible-playbooks
+      - /DATA/AppData/ansible-manager/config:/config
+    environment:
+      - ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
+      - ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
+      - ANSIBLE_LOGS=/logs
+      - VAULT_PASSWORD_FILE=/config/vault_password_file
 
   ui:
     container_name: ansible-manager-ui
