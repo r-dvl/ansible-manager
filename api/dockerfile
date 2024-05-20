@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
 LABEL org.opencontainers.image.source = "https://github.com/r-dvl/ansible-manager"
 LABEL org.opencontainers.image.description "Ansible Manager API"
@@ -6,9 +6,16 @@ LABEL org.opencontainers.image.description "Ansible Manager API"
 # Setup
 WORKDIR /api
 
+ENV ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
+ENV ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
+ENV ANSIBLE_LOGS=/logs
+ENV VAULT_PASSWORD_FILE=/config/vault_password_file
+
 # Install dependencies
 COPY ./requirements.txt /api/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /api/requirements.txt
+RUN apt-get update && apt-get install -y sshpass && \
+    pip install --no-cache-dir --upgrade -r /api/requirements.txt && \
+    pip install ansible
 
 # Copy code
 COPY ./main.py /api
