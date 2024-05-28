@@ -8,8 +8,8 @@ if (import.meta.env.MODE === "development") {
     password = 'dev';
 } else if (import.meta.env.MODE === "demo") {
     apiUrl = 'https://ansible-manager-api.rdvl-server.site';
-    username = 'demo';
-    password = 'demo';
+    username = 'admin';
+    password = 'admin';
 } else {
     apiUrl = import.meta.env.VITE_API_URL;
     username = import.meta.env.VITE_USERNAME;
