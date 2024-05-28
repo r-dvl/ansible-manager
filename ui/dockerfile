@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
-LABEL org.opencontainers.image.source = "https://github.com/r-dvl/ansible-manager"
-LABEL org.opencontainers.image.description "Ansible Dashboard"
+LABEL org.opencontainers.image.source="https://github.com/r-dvl/ansible-manager"
+LABEL org.opencontainers.image.description="Ansible Dashboard"
 
 # Env vars
 ENV TZ=Europe/Madrid
@@ -22,4 +22,4 @@ RUN npm install serve -g
 
 COPY ./start.sh /start.sh
 
-CMD ["/bin/bash", "/start.sh"]
+CMD ["/bin/sh", "/start.sh"]

@@ -1,7 +1,4 @@
-#!/bin/bash
-
-# Set Time Zone
-ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#!/bin/sh
 
 # Start application
 serve -s dist
