@@ -8,5 +8,5 @@ chmod 0644 /etc/cron.d/ansible
 crontab /etc/cron.d/ansible
 service cron start
 
-# Start your application
+# Start application
 python3 ./main.py
