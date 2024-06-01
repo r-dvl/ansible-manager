@@ -1,7 +1,7 @@
 FROM python:3.10
 
-LABEL org.opencontainers.image.source = "https://github.com/r-dvl/ansible-manager"
-LABEL org.opencontainers.image.description "Ansible Manager API"
+LABEL org.opencontainers.image.source="https://github.com/r-dvl/ansible-manager"
+LABEL org.opencontainers.image.description="Ansible Manager API"
 
 # Setup
 WORKDIR /api
@@ -26,13 +26,14 @@ RUN apt-get update && apt-get install -y sshpass cron tzdata && \
 COPY ./main.py /api
 COPY ./v1 /api/v1
 
-# API listener port
-EXPOSE 8080
-
-# Start cron service
-RUN service cron start
-
 # Copy startup script
 COPY ./start.sh /start.sh
 
+# Ensure the start.sh script is executable
+RUN chmod +x /start.sh
+
+# API listener port
+EXPOSE 8080
+
+# Start the application using the start.sh script
 CMD ["/bin/bash", "/start.sh"]
