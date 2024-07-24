@@ -20,10 +20,6 @@ import { bgGradient } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
-import { username, password } from '../../../config';
-
-// ----------------------------------------------------------------------
-
 export default function LoginView({ onLogin }) {
   const theme = useTheme();
   const router = useRouter();
@@ -31,13 +27,18 @@ export default function LoginView({ onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [usernameForm, setUsernameForm] = useState('');
   const [passwordForm, setPasswordForm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleClick = () => {
-    if (usernameForm === username && passwordForm === password) {
-      onLogin();
+  const handleClick = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await onLogin(usernameForm, passwordForm);
       router.push('/');
-    } else {
-      alert('Invalid credentials');
+    } catch (err) {
+      setError('Invalid credentials');
+      setLoading(false);
     }
   };
 
@@ -82,9 +83,11 @@ export default function LoginView({ onLogin }) {
         variant="contained"
         color="inherit"
         onClick={handleClick}
+        loading={loading}
       >
         Login
       </LoadingButton>
+      {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
     </>
   );
 

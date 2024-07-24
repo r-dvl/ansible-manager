@@ -1,24 +1,22 @@
-import { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useContext } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 
-export const HomePage = lazy(() => import('src/pages/home'));
-export const HostsPage = lazy(() => import('src/pages/hosts'));
-export const PlaybooksPage = lazy(() => import('src/pages/playbooks'));
-export const LoginPage = lazy(() => import('src/pages/login'));
-export const Page404 = lazy(() => import('src/pages/page-not-found'));
+import { AuthContext } from 'src/components/oauth';
+
+const HomePage = lazy(() => import('src/pages/home'));
+const HostsPage = lazy(() => import('src/pages/hosts'));
+const PlaybooksPage = lazy(() => import('src/pages/playbooks'));
+const LoginPage = lazy(() => import('src/pages/login'));
+const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 export default function Router() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
+  const { user } = useContext(AuthContext);
 
   const routes = useRoutes([
     {
-      element: isLoggedIn ? (
+      element: user ? (
         <DashboardLayout>
           <Suspense>
             <Outlet />
@@ -35,7 +33,7 @@ export default function Router() {
     },
     {
       path: 'login',
-      element: <LoginPage onLogin={handleLogin} />,
+      element: <LoginPage />,
     },
     {
       path: '404',

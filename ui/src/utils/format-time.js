@@ -1,6 +1,5 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
-
+import { format, getTime, formatDistanceToNow } from 'date-fns';
 
 const timeZone = 'Europe/Madrid';
 
