@@ -15,6 +15,7 @@ export default function LoginPage() {
       setUser(user);
     } catch (err) {
       setError('Incorrect username or password.');
+      throw error
     }
   };
 
