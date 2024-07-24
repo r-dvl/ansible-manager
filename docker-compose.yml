@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   api:
     container_name: ansible-manager-api
@@ -7,17 +6,14 @@ services:
       context: ./api
     ports:
       - 8080:8080
+    environment:
+      - MONGODB_URL=mongodb://ansible-manager-db:27017
+      - SECRET_KEY=secret
     volumes:
       - /DATA/AppData/ansible-manager/logs:/logs
       - /DATA/AppData/ansible-manager/cron.d:/etc/cron.d
       - /DATA/AppData/ansible-manager/ansible-playbooks:/ansible-playbooks
       - /DATA/AppData/ansible-manager/config:/config
-    environment:
-      - ANSIBLE_INVENTORY=/ansible-playbooks/inventories/hosts.yaml
-      - ANSIBLE_PLAYBOOKS=/ansible-playbooks/playbooks
-      - ANSIBLE_SCRIPTS=/ansible-playbooks/scripts
-      - ANSIBLE_LOGS=/logs
-      - VAULT_PASSWORD_FILE=/config/vault_password_file
 
   ui:
     container_name: ansible-manager-ui
@@ -26,3 +22,16 @@ services:
       context: ./ui
     ports:
       - '3000:3000'
+
+  database:
+    image: mongo:latest
+    container_name: ansible-manager-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - database_data:/database/data
+
+volumes:
+  database_data:
+    driver: local
